@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Na Batata - Cardápio Oficial</title>
+    <style>
+        :root { 
+            --vermelho: #E21C21; 
+            --amarelo: #FFB800; 
+            --verde: #2e7d32; 
+            --fundo: #f8f9fa; 
+            --branco: #ffffff;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            background: var(--fundo); 
+            padding-bottom: 120px; 
+            color: #333; 
+        }
+        
+        /* HEADER E VISUAL */
+        header { 
+            background: var(--branco); 
+            text-align: center; 
+            padding: 25px 20px; 
+            border-bottom: 5px solid var(--amarelo); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .banner-amor { 
+            background: var(--vermelho); 
+            color: white; 
+            padding: 10px; 
+            text-align: center; 
+            font-size: 12px; 
+            font-weight: bold; 
+            letter-spacing: 1px; 
+        }
+
+        .container { max-width: 500px; margin: 0 auto; padding: 15px; }
+
+        /* CARDS ESTILIZADOS */
+        .card { 
+            background: var(--branco); 
+            border-radius: 20px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
+            border: 1px solid #efefef; 
+        }
+        
+        .item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .info-principal h3 { margin: 0 0 8px 0; color: var(--vermelho); font-size: 20px; font-weight: 800; }
+        .info-principal p { margin: 0; font-size: 14px; color: #666; line-height: 1.4; }
+        
+        .preco-tag { 
+            background: #e8f5e9; 
+            color: var(--verde); 
+            padding: 8px 12px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            font-size: 16px; 
+            white-space: nowrap; 
+        }
+
+        /* CONTROLES */
+        .controles-qtd { 
+            display: flex; 
+            align-items: center; 
+            background: #f1f1f1; 
+            border-radius: 30px; 
+            padding: 5px; 
+            margin-top: 15px; 
+            width: fit-content; 
+        }
+        .btn-mudar { 
+            background: var(--vermelho); 
+            color: white; 
+            border: none; 
+            width: 34px; 
+            height: 34px; 
+            border-radius: 50%; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 20px; 
+        }
+        .qtd-exibida { margin: 0 15px; font-weight: bold; font-size: 16px; }
+
+        .seletor-queijo-container { margin-top: 15px; border-top: 1px dashed #ddd; padding-top: 10px; }
+        select { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 12px; 
+            border: 1px solid #ddd; 
+            background: #fdfdfd; 
+            font-size: 14px; 
+            margin-bottom: 8px; 
+        }
+
+        .opcoes-extras { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .extra-item input { display: none; }
+        .extra-box { 
+            display: block; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 12px; 
+            text-align: center; 
+            font-size: 12px; 
+            cursor: pointer; 
+            background: #fff;
+        }
+        .extra-item input:checked + .extra-box { 
+            background: #fff9e6; 
+            border-color: var(--amarelo); 
+            font-weight: bold; 
+            color: #856404; 
+        }
+
+        .btn-add-cart { 
+            background: var(--vermelho); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            width: 100%; 
+            border-radius: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 20px; 
+            text-transform: uppercase; 
+            font-size: 14px; 
+            box-shadow: 0 4px 0 #b31418; 
+        }
+
+        /* BARRA FLUTUANTE */
+        .footer-cart { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 5%; 
+            width: 90%; 
+            background: var(--verde); 
+            color: white; 
+            padding: 20px; 
+            border-radius: 20px; 
+            display: none; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-weight: bold; 
+            z-index: 100; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            box-sizing: border-box;
+        }
+
+        /* CHECKOUT MODAL */
+        #modal-checkout { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.85); 
+            z-index: 200; 
+            align-items: flex-end; 
+        }
+        .checkout-box { 
+            background: white; 
+            width: 100%; 
+            max-width: 500px; 
+            margin: 0 auto; 
+            padding: 25px; 
+            border-radius: 30px 30px 0 0; 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            box-sizing: border-box; 
+        }
+        
+        .secao-titulo { font-size: 16px; font-weight: bold; color: var(--vermelho); margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .full-width { grid-column: span 2; }
+        .input-group { position: relative; }
+        .input-group span { position: absolute; left: 12px; top: 38px; color: #999; }
+        .input-group label { font-size: 12px; font-weight: bold; color: #666; margin-bottom: 4px; display: block; }
+        .input-final { width: 100%; padding: 12px 12px 12px 35px; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 14px; background: #fafafa; }
+
+        .pg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .pg-btn { border: 2px solid #eee; padding: 12px; border-radius: 12px; text-align: center; cursor: pointer; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .pg-btn.active { border-color: var(--verde); background: #e8f5e9; color: var(--verde); }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 style="color:var(--vermelho); margin:0; font-size: 28px;">Na Batata</h1>
+    <p style="margin:5px 0 0; font-size: 14px; color: #666;">Sabor que surpreende em cada detalhe ❤️</p>
+</header>
+<div class="banner-amor">QUALIDADE E SABOR NA SUA MESA</div>
+
+<div class="container">
+    <div class="card" id="card-frango">
+        <div class="item-header">
+            <div class="info-principal">
+                <h3>Frango com Catupiry</h3>
+                <p>Nossa queridinha! Frango desfiado temperado com especiarias da casa e o legítimo Catupiry original.</p>
+            </div>
+            <div class="valor-box">
+                <span class="preco-tag" id="val-frango" data-base="25">R$ 25,00</span>
+            </div>
+        </div>
+        <div class="controles-qtd">
+            <button class="btn-mudar" onclick="ajustarQtd('frango', -1)">-</button>
+            <span class="qtd-exibida" id="qtd-frango">1</span>
+            <button class="btn-mudar" onclick="ajustarQtd('frango', 1)">+</button>
+        </div>
+        <div class="opcoes-extras" id="ext-frango">
+            <label class="extra-item"><input type="checkbox" data-p="4.5" onchange="totalizar('frango')"><span class="extra-box">+ Bacon R$4,50</span></label>
+            <label class="extra-item"><input type="checkbox" data-p="3.0" onchange="totalizar('frango')"><span class="extra-box">+ Palha R$3,00</span></label>
+        </div>
+        <button class="btn-add-cart" onclick="mandarProCarrinho('Frango com Catupiry', 'frango', false)">Adicionar ao Carrinho</button>
+    </div>
+
+    <div class="card" id="card-brocolis">
+        <div class="item-header">
+            <div class="info-principal">
+                <h3>Brócolis com Queijo</h3>
+                <p>Brócolis frescos selecionados, refogados levemente no alho e azeite, cobertos com queijo derretido.</p>
+            </div>
+            <div class="valor-box">
+                <span class="preco-tag" id="val-brocolis" data-base="25">R$ 25,00</span>
+            </div>
+        </div>
+        <div class="controles-qtd">
+            <button class="btn-mudar" onclick="ajustarQtd('brocolis', -1, true)">-</button>
+            <span class="qtd-exibida" id="qtd-brocolis">1</span>
+            <button class="btn-mudar" onclick="ajustarQtd('brocolis', 1, true)">+</button>
+        </div>
+        <div id="sel-brocolis" class="seletor-queijo-container">
+            <select onchange="totalizar('brocolis')">
+                <option value="Mussarela" data-e="0">Com Mussarela (Incluso)</option>
+                <option value="Creme de Queijo" data-e="3">Creme de Queijo (+ R$3,00)</option>
+            </select>
+        </div>
+        <button class="btn-add-cart" onclick="mandarProCarrinho('Brócolis com Queijo', 'brocolis', true)">Adicionar ao Carrinho</button>
+    </div>
+
+    <div class="card" id="card-queijos">
+        <div class="item-header">
+            <div class="info-principal">
+                <h3>Quatro Queijos</h3>
+                <p>Mussarela, Parmesão ralado, Provolone defumado e Requeijão cremoso.</p>
+            </div>
+            <div class="valor-box">
+                <span class="preco-tag" id="val-queijos" data-base="32">R$ 32,00</span>
+            </div>
+        </div>
+        <div class="controles-qtd">
+            <button class="btn-mudar" onclick="ajustarQtd('queijos', -1, true)">-</button>
+            <span class="qtd-exibida" id="qtd-queijos">1</span>
+            <button class="btn-mudar" onclick="ajustarQtd('queijos', 1, true)">+</button>
+        </div>
+        <div id="sel-queijos" class="seletor-queijo-container">
+            <select onchange="totalizar('queijos')">
+                <option value="Requeijão" data-e="0">Com Requeijão (Incluso)</option>
+                <option value="Gorgonzola" data-e="3">Com Gorgonzola (+ R$3,00)</option>
+            </select>
+        </div>
+        <button class="btn-add-cart" onclick="mandarProCarrinho('Quatro Queijos', 'queijos', true)">Adicionar ao Carrinho</button>
+    </div>
+
+    <div class="card" id="card-strogonoff">
+        <div class="item-header">
+            <div class="info-principal">
+                <h3>Strogonoff de Carne</h3>
+                <p>Iscas de carne macia ao molho de strogonoff legítimo, com creme de leite fresco e temperos especiais.</p>
+            </div>
+            <div class="valor-box">
+                <span class="preco-tag" id="val-strogonoff" data-base="35">R$ 35,00</span>
+            </div>
+        </div>
+        <div class="controles-qtd">
+            <button class="btn-mudar" onclick="ajustarQtd('strogonoff', -1)">-</button>
+            <span class="qtd-exibida" id="qtd-strogonoff">1</span>
+            <button class="btn-mudar" onclick="ajustarQtd('strogonoff', 1)">+</button>
+        </div>
+        <div class="opcoes-extras" id="ext-strogonoff">
+            <label class="extra-item"><input type="checkbox" data-p="3.0" onchange="totalizar('strogonoff')" checked><span class="extra-box">+ Batata Palha</span></label>
+            <label class="extra-item"><input type="checkbox" data-p="4.5" onchange="totalizar('strogonoff')"><span class="extra-box">+ Champignon R$4,50</span></label>
+        </div>
+        <button class="btn-add-cart" onclick="mandarProCarrinho('Strogonoff de Carne', 'strogonoff', false)">Adicionar ao Carrinho</button>
+    </div>
+</div>
+
+<div class="footer-cart" id="barra-final" onclick="mostrarCheckout()">
+    <span>🛒 <span id="resumo-qtd">0</span> ITENS</span>
+    <span id="resumo-total">R$ 0,00</span>
+</div>
+
+<div id="modal-checkout">
+    <div class="checkout-box">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 style="margin:0; color:var(--vermelho); font-size:22px;">Seu Pedido</h2>
+            <button onclick="document.getElementById('modal-checkout').style.display='none'" style="border:none; background:none; font-size:24px;">&times;</button>
+        </div>
+        <div id="itens-confirmacao" style="margin-top:15px; border-bottom:1px solid #eee; padding-bottom:15px;"></div>
+
+        <div class="secao-titulo">📍 Entrega</div>
+        <div class="form-grid">
+            <div class="input-group full-width"><label>Nome</label><span>👤</span><input type="text" id="fin-nome" class="input-final" placeholder="Seu Nome"></div>
+            <div class="input-group full-width"><label>Rua</label><span>🏠</span><input type="text" id="fin-rua" class="input-final" placeholder="Nome da Rua"></div>
+            <div class="input-group"><label>Número</label><span>🔢</span><input type="text" id="fin-num" class="input-final" placeholder="Nº"></div>
+            <div class="input-group"><label>Bairro</label><span>🏢</span><input type="text" id="fin-bairro" class="input-final" placeholder="Bairro"></div>
+            <div class="input-group full-width"><label>CEP</label><span>📮</span><input type="text" id="fin-cep" class="input-final" placeholder="00000-000"></div>
+        </div>
+
+        <div class="secao-titulo">💳 Pagamento</div>
+        <div class="pg-grid">
+            <div class="pg-btn" onclick="escolherPg('Pix', this)"><span>💠</span>Pix</div>
+            <div class="pg-btn" onclick="escolherPg('Dinheiro', this)"><span>💵</span>Dinheiro</div>
+            <div class="pg-btn" onclick="escolherPg('Crédito', this)"><span>💳</span>Crédito</div>
+            <div class="pg-btn" onclick="escolherPg('Débito', this)"><span>💳</span>Débito</div>
+        </div>
+        <div id="troco-area" style="display:none"><input type="number" id="fin-troco" class="input-final" placeholder="Troco para quanto?" style="margin-top:10px;"></div>
+
+        <div style="background:#e8f5e9; padding:15px; border-radius:15px; margin-top:20px; text-align:center; font-weight:bold; color:var(--verde); font-size:20px;">
+            TOTAL: <span id="fin-total">R$ 0,00</span>
+        </div>
+
+        <button class="btn-add-cart" style="background:var(--verde); box-shadow:0 4px 0 #1b5e20;" onclick="enviarWhatsApp()">🚀 ENVIAR NO WHATSAPP</button>
+    </div>
+</div>
+
+<script>
+    let carrinho = [];
+    let pagamentoSel = "";
+
+    function totalizar(id) {
+        const precoEl = document.getElementById('val-' + id);
+        const base = parseFloat(precoEl.dataset.base);
+        const qtd = parseInt(document.getElementById('qtd-' + id).innerText);
+        let extras = 0;
+        const selDiv = document.getElementById('sel-' + id);
+        if(selDiv) selDiv.querySelectorAll('select').forEach(s => extras += parseFloat(s.options[s.selectedIndex].dataset.e));
+        const extDiv = document.getElementById('ext-' + id);
+        if(extDiv) extDiv.querySelectorAll('input:checked').forEach(i => extras += parseFloat(i.dataset.p));
+        precoEl.innerText = "R$ " + ((base + extras) * qtd).toFixed(2).replace('.', ',');
+    }
+
+    function ajustarQtd(id, delta, temQueijo) {
+        const label = document.getElementById('qtd-' + id);
+        let atual = parseInt(label.innerText) + delta;
+        if(atual < 1) return;
+        label.innerText = atual;
+        if(temQueijo) {
+            const container = document.getElementById('sel-' + id);
+            if(delta > 0) container.appendChild(container.firstElementChild.cloneNode(true));
+            else if(container.children.length > 1) container.lastElementChild.remove();
+        }
+        totalizar(id);
+    }
+
+    function mandarProCarrinho(nome, id, temQueijo) {
+        const qtd = parseInt(document.getElementById('qtd-' + id).innerText);
+        const valor = parseFloat(document.getElementById('val-' + id).innerText.replace('R$ ', '').replace(',', '.'));
+        let obs = [];
+        if(temQueijo) document.querySelectorAll('#sel-' + id + ' select').forEach((s, i) => obs.push(`Batata ${i+1}: ${s.value}`));
+        const extras = document.getElementById('ext-' + id);
+        if(extras) extras.querySelectorAll('input:checked').forEach(i => obs.push(i.parentElement.innerText.trim()));
+
+        carrinho.push({ nome, qtd, valor, obs });
+        atualizarResumoBarra();
+        alert("✔️ " + nome + " adicionada!");
+    }
+
+    function atualizarResumoBarra() {
+        const soma = carrinho.reduce((acc, item) => acc + item.valor, 0);
+        document.getElementById('resumo-qtd').innerText = carrinho.length;
+        document.getElementById('resumo-total').innerText = "R$ " + (soma + 5).toFixed(2).replace('.', ',');
+        document.getElementById('barra-final').style.display = carrinho.length > 0 ? 'flex' : 'none';
+    }
+
+    function mostrarCheckout() {
+        const lista = document.getElementById('itens-confirmacao');
+        lista.innerHTML = carrinho.map((item, index) => `
+            <div style="background:#f9f9f9; padding:10px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                <div><strong>${item.qtd}x ${item.nome}</strong><br><small>${item.obs.join(' | ')}</small></div>
+                <button onclick="excluirItem(${index})" style="border:none; background:none; color:red; cursor:pointer;">🗑️</button>
+            </div>
+        `).join('');
+        const soma = carrinho.reduce((acc, item) => acc + item.valor, 0);
+        document.getElementById('fin-total').innerText = "R$ " + (soma + 5).toFixed(2).replace('.', ',');
+        document.getElementById('modal-checkout').style.display = 'flex';
+    }
+
+    function excluirItem(idx) {
+        carrinho.splice(idx, 1);
+        if(carrinho.length === 0) document.getElementById('modal-checkout').style.display = 'none';
+        atualizarResumoBarra();
+        mostrarCheckout();
+    }
+
+    function escolherPg(tipo, btn) {
+        pagamentoSel = tipo;
+        document.querySelectorAll('.pg-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('troco-area').style.display = tipo === 'Dinheiro' ? 'block' : 'none';
+    }
+
+    function enviarWhatsApp() {
+        const nome = document.getElementById('fin-nome').value;
+        const rua = document.getElementById('fin-rua').value;
+        const num = document.getElementById('fin-num').value;
+        const bairro = document.getElementById('fin-bairro').value;
+        if(!nome || !rua || !num || !pagamentoSel) return alert("Por favor, preencha nome, endereço e pagamento!");
+
+        let texto = `🍟 *NOVO PEDIDO - NA BATATA*\n\n`;
+        carrinho.forEach(i => { texto += `✅ *${i.qtd}x ${i.nome}*\n   _${i.obs.join(', ')}_\n\n`; });
+        texto += `💰 *TOTAL C/ ENTREGA:* ${document.getElementById('fin-total').innerText}\n\n`;
+        texto += `👤 *Cliente:* ${nome}\n📍 *End:* ${rua}, nº ${num} - ${bairro}\n💳 *Pagamento:* ${pagamentoSel}`;
+        if(pagamentoSel === 'Dinheiro') texto += `\n💵 *Troco para:* R$ ${document.getElementById('fin-troco').value}`;
+
+        window.open(`https://wa.me/5512997444206?text=${encodeURIComponent(texto)}`);
+    }
+</script>
+</body>
+</html>

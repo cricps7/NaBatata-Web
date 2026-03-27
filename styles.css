@@ -1,0 +1,157 @@
+:root {
+    --vermelho: #E21C21;
+    --amarelo: #FFB800;
+    --branco: #ffffff;
+    --fundo: #fdfdfd;
+    --texto: #2d2d2d;
+    --sombra: rgba(0,0,0,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--fundo);
+    color: var(--texto);
+}
+
+.container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+/* Header */
+header {
+    background: var(--branco);
+    padding: 10px 0;
+    border-bottom: 4px solid var(--amarelo);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav { display: flex; justify-content: space-between; align-items: center; }
+
+.logo { height: 65px; }
+
+.header-status {
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 6px 15px;
+    border-radius: 30px;
+}
+
+.dot { font-size: 1.2rem; vertical-align: middle; margin-right: 5px; }
+
+/* Hero */
+.hero {
+    background: var(--vermelho);
+    color: var(--branco);
+    text-align: center;
+    padding: 50px 20px;
+    border-bottom-left-radius: 50% 15%;
+    border-bottom-right-radius: 50% 15%;
+}
+
+.hero h1 { font-size: 3rem; margin-bottom: 10px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
+
+/* Barra de Informações */
+.info-bar {
+    display: flex;
+    justify-content: space-around;
+    background: var(--branco);
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: -30px;
+    box-shadow: 0 5px 15px var(--sombra);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Cards de Batata */
+.titulo-secao { text-align: center; margin: 50px 0 30px; font-size: 1.8rem; }
+
+.grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 60px;
+}
+
+.card {
+    background: var(--branco);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px var(--sombra);
+    transition: 0.3s;
+    position: relative;
+    border: 1px solid #eee;
+}
+
+.card:hover { transform: translateY(-5px); }
+
+.badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--amarelo);
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+}
+
+.card-img { height: 190px; background-size: cover; background-position: center; }
+
+.card-body { padding: 20px; }
+
+.card-body h3 { color: var(--vermelho); margin-bottom: 8px; }
+
+.card-body p { font-size: 0.9rem; color: #555; height: 55px; overflow: hidden; }
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #ddd;
+}
+
+.preco { font-size: 1.4rem; font-weight: 800; color: #1a5a1e; }
+
+.btn-pedido {
+    background: var(--vermelho);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-pedido:hover { background: var(--amarelo); color: black; }
+
+/* Footer */
+footer { background: #222; color: #999; text-align: center; padding: 40px 20px; margin-top: 40px; }
+footer strong { color: var(--amarelo); }
+
+/* WhatsApp */
+.wa-float {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #25d366;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+.wa-float img { width: 35px; }
+
+@media (max-width: 600px) {
+    .info-bar { flex-direction: column; text-align: center; }
+}
